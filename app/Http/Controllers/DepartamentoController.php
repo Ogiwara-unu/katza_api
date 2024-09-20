@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Departamento;
+use Illuminate\Support\Facades\DB;
 
 class DepartamentoController extends Controller
 {
     //Get
     public function index(){
-        $data=Departamento::all();
+        $data=DB::select('EXEC paMostrarDepartamentos');
         $response=array(
             "status"=>200,
             "message"=>"Todos los registros de departamento",
@@ -20,49 +21,53 @@ class DepartamentoController extends Controller
     }
 
     //Post
-    public function store(Request $request){
-        $data_input=$request->input('data',null);
-        if($data_input){
-            $data=json_decode($data_input,true);
-            $data=array_map('trim',$data);
-            $rules=[
-                'nombre'=>'required',
-                'descripcion'=>'required'
+
+public function store(Request $request) {
+    $data_input = $request->input('data', null);
+    if ($data_input) {
+        $data = json_decode($data_input, true);
+        $data = array_map('trim', $data);
+        $rules = [
+            'nombre' => 'required',
+            'descripcion' => 'required'
+        ];
+
+        $isValid = \validator($data, $rules);
+        if (!$isValid->fails()) {
+            // Invocar el procedimiento almacenado que no devuelve resultados
+            DB::statement('EXEC paCrearDepartamento ?, ?', [
+                $data['nombre'],
+                $data['descripcion']
+            ]);            
+
+            $response = [
+                'status' => 201,
+                'message' => 'Departamento creado con procedimiento almacenado'
             ];
-    
-            $isValid=\validator($data,$rules);
-            if(!$isValid->fails()){
-                $departamento=new departamento();
-                $departamento->nombre=$data['nombre']; 
-                $departamento->descripcion=$data['descripcion'];
-                $departamento->save();
-                $response=array(
-                    'status'=>201,
-                    'message'=>'Departamento creado',
-                    'departamento'=>$departamento
-                );
-            }else{
-                $response=array(
-                    'status'=>206,
-                    'message'=>'Datos inválidos',
-                    'errors'=>$isValid->errors()
-                );
-            }
-        }else{
-            $response=array(
-             'status'=>400,
-             'message'=>'No se enconto el objeto en data'
-             
-            );
+        } else {
+            $response = [
+                'status' => 206,
+                'message' => 'Datos inválidos',
+                'errors' => $isValid->errors()
+            ];
         }
-        return response()->json($response,$response['status']);
+    } else {
+        $response = [
+            'status' => 400,
+            'message' => 'No se encontró el objeto en data'
+        ];
     }
+
+    return response()->json($response, $response['status']);
+}
 
 
     public function show($id){
         $data = Departamento::where('idDepartamento', $id)->first();
         if(is_object($data)){
-            $data=$data->load('empleados');
+            $data=DB::select('EXEC paMostrarDepartamento ?', [
+                $data['idDepartamento'],
+            ]);
             $response=array(
                 'status'=>200,
                 'message'=>'Datos de departamentos',
@@ -80,28 +85,34 @@ class DepartamentoController extends Controller
 
     //Eliminar
     public function destroy($id){
-        if (isset($id)){
-            $deleted = Departamento::where('idDepartamento', $id)->delete();
-            if($deleted){
-                $response=array(
-                    'status'=>200,
-                    'message'=>'Departamento eliminado',
-                );
-    
-            }else{
-                $response=array(
-                    'status'=> 400,
-                    'message'=>'Recurso no encontrado, compruebe que exista'
-                );
+        if (isset($id)) {
+            // Llamar al procedimiento almacenado correcto para eliminar
+            $deleted = DB::statement('EXEC paEliminarDepartamento ?', [
+                $id
+            ]);
+            
+            // Verificar si la eliminación fue exitosa
+            if($deleted) {
+                $response = [
+                    'status' => 200,
+                    'message' => 'Departamento eliminado'
+                ];
+            } else {
+                $response = [
+                    'status' => 400,
+                    'message' => 'Recurso no encontrado, compruebe que exista'
+                ];
             }
-        }else{
-            $response=array(
-                'status'=> 406,
-                'message'=>'Falta el identificador del recurso a eliminar'
-            );
+        } else {
+            $response = [
+                'status' => 406,
+                'message' => 'Falta el identificador del recurso a eliminar'
+            ];
         }
-        return response()->json($response,$response['status']);
+        
+        return response()->json($response, $response['status']);
     }
+    
 
    
 // Actualizar
@@ -120,10 +131,11 @@ public function update(Request $request, $id) {
         if(!$isValid->fails()) {
             $departamento = Departamento::where('idDepartamento', $id)->first();
             if($departamento) {
-                $departamento->idDepartamento = $data['idDepartamento'];
-                $departamento->nombre = $data['nombre']; 
-                $departamento->descripcion = $data['descripcion'];
-                $departamento->save();
+                DB::statement('EXEC paModificarDepartamento ?, ?, ?', [
+                    $data['idDepartamento'],
+                    $data['nombre'],
+                    $data['descripcion']
+                ]);    
                 $response = [
                     'status' => 200,
                     'message' => 'Departamento actualizado',
