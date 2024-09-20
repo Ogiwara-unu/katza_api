@@ -26,7 +26,6 @@ class DepartamentoController extends Controller
             $data=json_decode($data_input,true);
             $data=array_map('trim',$data);
             $rules=[
-                'idDepartamento'=>'required',
                 'nombre'=>'required',
                 'descripcion'=>'required'
             ];
@@ -34,7 +33,6 @@ class DepartamentoController extends Controller
             $isValid=\validator($data,$rules);
             if(!$isValid->fails()){
                 $departamento=new departamento();
-                $departamento->idDepartamento=$data['idDepartamento'];
                 $departamento->nombre=$data['nombre']; 
                 $departamento->descripcion=$data['descripcion'];
                 $departamento->save();
