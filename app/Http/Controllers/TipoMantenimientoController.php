@@ -26,15 +26,12 @@ public function store(Request $request){
         $data=json_decode($data_input,true);
         $data=array_map('trim',$data);
         $rules=[
-            'idTipoMantenimiento'=>'required',
             'nombre'=>'required'
-            
         ];
 
         $isValid=\validator($data,$rules);
         if(!$isValid->fails()){
             $tipoMantenimiento=new TipoMantenimiento();
-            $tipoMantenimiento->idTipoMantenimiento=$data['idTipoMantenimiento'];
             $tipoMantenimiento->nombre=$data['nombre']; 
             $tipoMantenimiento->save();
             $response=array(

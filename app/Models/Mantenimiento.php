@@ -17,7 +17,7 @@ class Mantenimiento extends Model
         'tipoMantenimiento', 
         'empleadoEncargado', 
         'fechaMantenimiento', 
-        'duracionMantenimiento'
+        'duracionMantenimiento' 
     ];
 
     public function vehiculo()

@@ -10,7 +10,7 @@ class Empleado extends Model
     use HasFactory;
     protected $table='empleados';
     protected $primaryKey = 'idEmpleado';
-    protected $fillable=['idEmpleado', 'nombre', 'apellidos', 'correo', 'telefono','departamento','fechaContratacion'];
+    protected $fillable=['idEmpleado','cedula','nombre', 'apellidos', 'correo', 'telefono','departamento','fechaContratacion']; //AGREGUE EL CAMPO CEDULA
 
     public function departamento(){
         return $this->belongsTo('App\Models\Departamento', 'idDepartamento');

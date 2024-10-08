@@ -26,7 +26,6 @@ public function store(Request $request){
         $data=json_decode($data_input,true);
         $data=array_map('trim',$data);
         $rules=[
-            'idMantenimiento' => 'required',
             'idVehiculo' => 'required|exists:vehiculos,placaVehiculo',
             'tipoMantenimiento' => 'required|exists:tipoMantenimientos,idTipoMantenimiento',
             'empleadoEncargado' => 'required|exists:empleados,idEmpleado',
@@ -37,7 +36,6 @@ public function store(Request $request){
         $isValid=\validator($data,$rules);
         if(!$isValid->fails()){
             $Mantenimiento=new Mantenimiento();
-            $Mantenimiento->idMantenimiento = $data['idMantenimiento'];
             $Mantenimiento->idVehiculo = $data['idVehiculo'];
             $Mantenimiento->tipoMantenimiento = $data['tipoMantenimiento'];
             $Mantenimiento->empleadoEncargado = $data['empleadoEncargado'];

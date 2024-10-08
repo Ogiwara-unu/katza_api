@@ -25,7 +25,7 @@ public function store(Request $request){
         $data=json_decode($data_input,true);
         $data=array_map('trim',$data);
         $rules=[
-
+            'placa'=>'required|unique:vehiculos',
             'modelo'=>'required',
             'marca'=>'required',
         ];
@@ -33,6 +33,7 @@ public function store(Request $request){
         $isValid=\validator($data,$rules);
         if(!$isValid->fails()){
             $vehiculo=new Vehiculo();
+            $vehiculo->placa=$data['placa']; 
             $vehiculo->modelo=$data['modelo']; 
             $vehiculo->marca=$data['marca'];
             $vehiculo->save();

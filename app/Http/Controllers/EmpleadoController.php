@@ -27,7 +27,7 @@ public function store(Request $request){
         $data=json_decode($data_input,true);
         $data=array_map('trim',$data);
         $rules=[
-            'idEmpleado'=>'required',
+            'cedula'=>'required|unique:empleados',
             'nombre'=>'required',
             'apellidos'=>'required',
             'correo'=>'required',
@@ -39,7 +39,7 @@ public function store(Request $request){
         $isValid=\validator($data,$rules);
         if(!$isValid->fails()){
             $empleado=new Empleado();
-            $empleado->idEmpleado=$data['idEmpleado'];
+            $empleado->cedula=$data['cedula']; 
             $empleado->nombre=$data['nombre']; 
             $empleado->apellidos=$data['apellidos'];
             $empleado->correo=$data['correo'];

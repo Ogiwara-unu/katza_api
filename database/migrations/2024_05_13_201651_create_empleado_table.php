@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('empleados', function (Blueprint $table) {
             $table->id('idEmpleado');
+            $table->string('cedula', 50);  //AGREGUE EL CAMPO CEDULA
             $table->string('nombre', 50);
             $table->string('apellidos', 70);
             $table->string('correo', 45);

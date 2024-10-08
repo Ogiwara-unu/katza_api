@@ -11,7 +11,7 @@ class Vehiculo extends Model
     use HasFactory;
     protected $table='vehiculos';
     protected $primaryKey = 'placaVehiculo';
-    protected $fillable=['placaVehiculo', 'modelo', 'marca'];
+    protected $fillable=['placaVehiculo','placa','modelo', 'marca'];
 
     public function mantenimientos(){
         return $this->hasMany('App\Models\Mantenimiento', 'idVehiculo');
