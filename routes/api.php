@@ -24,5 +24,5 @@ Route::resource('/Mantenimiento', MantenimientoController::class, ['except'=> ['
 Route::resource('/TipoMantenimiento', TipoMantenimientoController::class, ['except'=> ['create','edit']]);
 Route::resource('/Vehiculo', VehiculoController::class, ['except'=> ['create','edit']]);
 Route::resource('/DetalleManVehiculo', DetalleManVehiculoController::class, ['except'=> ['create','edit']]);
-Route::resource('/user', UserController::class, ['only' => ['index', 'show']])->middleware(ApiAuthMiddleware::class);
+Route::resource('/user', UserController::class, ['only' => ['index', 'show','destroy']])->middleware(ApiAuthMiddleware::class);
 });

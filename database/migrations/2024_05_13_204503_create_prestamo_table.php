@@ -10,9 +10,9 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+    {            
         Schema::create('prestamos', function (Blueprint $table) {
-            $table->id('idPrestamo');
+            $table->id('idPrestamo');  
             $table->unsignedBigInteger('empleadoEmisor');
             $table->foreign('empleadoEmisor')->references('idEmpleado')->on('empleados');
             $table->unsignedBigInteger('empleadoReceptor');

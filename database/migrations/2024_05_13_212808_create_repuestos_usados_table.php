@@ -9,11 +9,11 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up(): void  
     {
         Schema::create('repuestosUsados', function (Blueprint $table) {
             $table->id('idRepuestosUsados');
-            $table->unsignedBigInteger('respuesto');
+            $table->unsignedBigInteger('repuestos');
             $table->foreign('respuesto')->references('idRepuesto')->on('repuestos');
             $table->integer('cantidadUsada');
             $table->unsignedBigInteger('mantenimiento');
