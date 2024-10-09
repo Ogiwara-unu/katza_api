@@ -18,6 +18,7 @@ Route::get('/user', function (Request $request) {
 Route::prefix('v1')->group(function(){
 Route::post('/user', [UserController::class, 'store']);
 Route::post('/user/login', [UserController::class,'login']);
+Route::get('/user/getIdentity', [UserController::class,'getIdentity'])->middleware(ApiAuthMiddleware::class);
 Route::resource('/Departamento', DepartamentoController::class, ['except'=> ['create','edit']]);
 Route::resource('/Empleado', EmpleadoController::class, ['except'=> ['create','edit']]);
 Route::resource('/Mantenimiento', MantenimientoController::class, ['except'=> ['create','edit']]);
