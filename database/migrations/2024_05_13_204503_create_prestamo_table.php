@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('empleadoReceptor')->references('idEmpleado')->on('empleados');
             $table->enum('estadoPrestamo', ['activo', 'completado']);
             $table->date('fechaPrestamo');
-            $table->date('fechaLimite');
+            $table->date('fechaLimite')->nullable();
             $table->timestamps();
         });
     }

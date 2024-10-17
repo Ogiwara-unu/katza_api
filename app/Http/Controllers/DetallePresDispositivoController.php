@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetalleManVehiculo;
-use App\Models\DetallePresVehiculo;
+use App\Models\DetallePresDispositivo;
 use Illuminate\Http\Request;
 
-class DetallePresVehiculoController extends Controller
+class DetallePresDispositivoController extends Controller
 {
     public function index(){
-        $data=DetallePresVehiculo::all();
+        $data=DetallePresDispositivo::all();
         $response=array(
             "status"=>200,
-            "message"=>"Todos los registros de detalle prestamo vehiculo",
+            "message"=>"Todos los registros de detalle prestamo dispositivo",
             "data"=>$data
         );
         return response()->json($response,200);
@@ -26,28 +25,24 @@ public function store(Request $request){
         $data=json_decode($data_input,true);
         $data=array_map('trim',$data);
         $rules=[
-            'prestamo' => 'required|exists:prestamos,idPrestamo',
             'observaciones' => 'required',
-            'kmInicial' => 'required',
-            'kmFinal' => 'required',
-            'vehiculoPrestado' => 'required|exists:vehiculos,placaVehiculo',
+            'prestamo' => 'required|exists:prestamos,idPrestamo',
+            'dispositivosPrestado' => 'required|exists:dispositivos,idDispositivos',
             'fechaDevolucion' => 'required'
         ];
 
         $isValid=\validator($data,$rules);
         if(!$isValid->fails()){
-            $detallePresVehiculo=new DetallePresVehiculo();
-            $detallePresVehiculo->prestamo = $data['prestamo'];
-            $detallePresVehiculo->observaciones = $data['observaciones'];
-            $detallePresVehiculo->kmInicial = $data['kmInicial'];
-            $detallePresVehiculo->kmFinal = $data['kmFinal'];
-            $detallePresVehiculo->vehiculoPrestado = $data['vehiculoPrestado'];
-            $detallePresVehiculo->fechaDevolucion = $data['fechaDevolucion'];
-            $detallePresVehiculo->save();
+            $detallePresDispositivo=new DetallePresDispositivo();
+            $detallePresDispositivo->observaciones = $data['observaciones'];
+            $detallePresDispositivo->prestamo = $data['prestamo'];
+            $detallePresDispositivo->dispositivosPrestado = $data['dispositivosPrestado'];
+            $detallePresDispositivo->fechaDevolucion = $data['fechaDevolucion'];
+            $detallePresDispositivo->save();
             $response=array(
                 'status'=>201,
-                'message'=>'detalle de prestamo vehiculo creado',
-                'detallePresVehiculo'=>$detallePresVehiculo
+                'message'=>'detalle de prestamo dispositivo creado',
+                'detallePresDispositivo'=>$detallePresDispositivo
             );
         }else{
             $response=array(
@@ -68,11 +63,11 @@ public function store(Request $request){
 
 
 public function show($id){
-    $data=DetallePresVehiculo::find($id);
+    $data=DetallePresDispositivo::find($id);
     if(is_object($data)){
         $response=array(
             'status'=>200,
-            'message'=>'Datos de los detalle prestamo vehiculo',
+            'message'=>'Datos de los detalle prestamo dispositivo',
             'errors'=>$data
         );
     }else{
@@ -88,11 +83,11 @@ public function show($id){
 //Eliminar
 public function destroy($id){
     if (isset($id)){
-        $deleted = DetallePresVehiculo::where('idDetallePrestamo', $id)->delete();
+        $deleted = DetallePresDispositivo::where('idDetallePrestamoDispositivo', $id)->delete();
         if($deleted){
             $response=array(
                 'status'=>200,
-                'message'=>'detalle prestamo vehiculo eliminado',
+                'message'=>'detalle prestamo dispositivo eliminado',
             );
 
         }else{
@@ -119,36 +114,32 @@ public function update(Request $request, $id) {
         $data = json_decode($data_input, true);
         $data = array_map('trim', $data);
         $rules = [
-            'idDetallePrestamo' => 'required',
-            'prestamo' => 'required|exists:prestamos,idPrestamo',
+            'idDetallePrestamoDispositivo' => 'required',
             'observaciones' => 'required',
-            'kmInicial' => 'required',
-            'kmFinal' => 'required',
-            'vehiculoPrestado' => 'required|exists:vehiculos,placaVehiculo',
+            'prestamo' => 'required|exists:prestamos,idPrestamo',
+            'dispositivosPrestado' => 'required|exists:dispositivos,idDispositivos',
             'fechaDevolucion' => 'required'
         ];
         
 
         $isValid = \validator($data, $rules);
         if(!$isValid->fails()) {
-            $detallePresVehiculo = DetallePresVehiculo::where('idDetallePrestamo', $id)->first();
-            if($detallePresVehiculo) {
-                $detallePresVehiculo->prestamo = $data['prestamo'];
-                $detallePresVehiculo->observaciones = $data['observaciones'];
-                $detallePresVehiculo->kmInicial = $data['kmInicial'];
-                $detallePresVehiculo->kmFinal = $data['kmFinal'];
-                $detallePresVehiculo->vehiculoPrestado = $data['vehiculoPrestado'];
-                $detallePresVehiculo->fechaDevolucion = $data['fechaDevolucion'];
-                $detallePresVehiculo->save();
+            $detallePresDispositivo = DetallePresDispositivo::where('idDetallePrestamoDispositivo', $id)->first();
+            if($detallePresDispositivo) {
+                $detallePresDispositivo->observaciones = $data['observaciones'];
+                $detallePresDispositivo->prestamo = $data['prestamo'];
+                $detallePresDispositivo->dispositivosPrestado = $data['dispositivosPrestado'];
+                $detallePresDispositivo->fechaDevolucion = $data['fechaDevolucion'];
+                $detallePresDispositivo->save();
                 $response = [
                     'status' => 200,
-                    'message' => 'detalle prestamo vehiculo actualizado',
-                    'detallePresVehiculo' => $detallePresVehiculo
+                    'message' => 'detalle prestamo dispositivo actualizado',
+                    'detallePresDispositivo' => $detallePresDispositivo
                 ];
             } else {
                 $response = [
                     'status' => 404,
-                    'message' => 'detalle prestamo vehiculo no encontrado'
+                    'message' => 'detalle prestamo dispositivo no encontrado'
                 ];
             }
         } else {

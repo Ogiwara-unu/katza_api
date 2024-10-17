@@ -8,14 +8,20 @@ use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\TipoMantenimientoController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\DetalleManVehiculoController;
+use App\Http\Controllers\DetallePresDispositivoController;
+use App\Http\Controllers\DetallePresVehiculoController;
+use App\Http\Controllers\DispositivoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MarcaRepuestoController;
 use App\Http\Controllers\ModeloRepuestoController;
+use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\RepuestoController;
 use App\Http\Controllers\RepuestoUsadoController;
+use App\Http\Controllers\TipoDispositivoController;
 use App\Http\Controllers\TipoRepuestoController;
 use App\Http\Middleware\ApiAuthMiddleware;
-
+use App\Models\DetallePresDispositivo;
+use App\Models\DetallePresVehiculo;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -36,5 +42,10 @@ Route::resource('/ModeloRepuesto', ModeloRepuestoController::class, ['except'=> 
 Route::resource('/Repuesto', RepuestoController::class, ['except'=> ['create','edit']]);
 Route::resource('/RepuestoUsado', RepuestoUsadoController::class, ['except'=> ['create','edit']]);
 Route::resource('/TipoRepuesto', TipoRepuestoController::class, ['except'=> ['create','edit']]);
+Route::resource('/TipoDispositivo', TipoDispositivoController::class, ['except'=> ['create','edit']]);
+Route::resource('/Dispositivo', DispositivoController::class, ['except'=> ['create','edit']]);
+Route::resource('/DetallePresDispositivo', DetallePresDispositivoController::class, ['except'=> ['create','edit']]);
+Route::resource('/DetallePresVehiculo', DetallePresVehiculoController::class, ['except'=> ['create','edit']]);
+Route::resource('/Prestamo', PrestamoController::class, ['except'=> ['create','edit']]);
 Route::resource('/user', UserController::class, ['only' => ['index', 'show','destroy']])->middleware(ApiAuthMiddleware::class);
 });

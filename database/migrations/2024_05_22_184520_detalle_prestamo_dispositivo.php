@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('detallePrestamoDispositivo', function (Blueprint $table) {
             $table->id('idDetallePrestamoDispositivo');
-            $table->string('observaciones');
+            $table->string('observaciones')->nullable();
             $table->unsignedBigInteger('prestamo');
             $table->foreign('prestamo')->references('idPrestamo')->on('prestamos');
-            $table->integer('dispositivosPrestados');
+            $table->unsignedBigInteger('dispositivosPrestado');
+            $table->foreign('dispositivosPrestado')->references('idDispositivos')->on('dispositivos');
             $table->date('fechaDevolucion');
             $table->timestamps();
         });

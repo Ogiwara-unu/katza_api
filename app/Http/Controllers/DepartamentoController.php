@@ -21,7 +21,6 @@ class DepartamentoController extends Controller
     }
 
     //Post
-
 public function store(Request $request) {
     $data_input = $request->input('data', null);
     if ($data_input) {
@@ -42,7 +41,7 @@ public function store(Request $request) {
 
             $response = [
                 'status' => 201,
-                'message' => 'Departamento creado con procedimiento almacenado'
+                'message' => 'Departamento registrado'
             ];
         } else {
             $response = [

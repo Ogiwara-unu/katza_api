@@ -25,7 +25,6 @@ class PrestamoController extends Controller
             $data=json_decode($data_input,true);
             $data=array_map('trim',$data);
             $rules=[
-                'idPrestamo'=>'required',
                 'empleadoEmisor'=>'required|exists:empleados,idEmpleado',
                 'empleadoReceptor'=>'required|exists:empleados,idEmpleado',
                 'estadoPrestamo'=>'required',
@@ -36,7 +35,6 @@ class PrestamoController extends Controller
             $isValid=\validator($data,$rules);
             if(!$isValid->fails()){
                 $prestamo=new Prestamo();
-                $prestamo->idPrestamo=$data['idPrestamo'];
                 $prestamo->empleadoEmisor=$data['empleadoEmisor']; 
                 $prestamo->empleadoReceptor=$data['empleadoReceptor'];
                 $prestamo->estadoPrestamo=$data['estadoPrestamo'];
