@@ -105,7 +105,7 @@ class TipoRepuestoController extends Controller
             $data = json_decode($data_input, true);
             $data = array_map('trim', $data);
             $rules = [
-                'idtipoRepuesto' => 'required',  //VERIFICAR ESTA PUTA MIERDA
+                'idtipoRepuesto' => 'required',  
                 'nombre' => 'required|string|max:100',
             ];
 

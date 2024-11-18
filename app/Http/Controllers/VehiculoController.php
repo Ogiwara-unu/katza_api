@@ -45,7 +45,7 @@ public function store(Request $request){
         }else{
             $response=array(
                 'status'=>206,
-                'message'=>'Datos inválidos unu',
+                'message'=>'Datos inválidos',
                 'errors'=>$isValid->errors()
             );
         }

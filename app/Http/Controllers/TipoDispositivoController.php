@@ -113,14 +113,14 @@ class TipoDispositivoController extends Controller
             if(!$isValid->fails()) {
                 $tipoRepuesto = TipoDispositivo::where('idTipoDispositivo', $id)->first();
                 if($tipoRepuesto) {
-                    $tipoRepuesto->idtipoRepuesto = $data['idTipoDispositivo'];
+                    $tipoRepuesto->idTipoDispositivo = $data['idTipoDispositivo'];
                     $tipoRepuesto->nombre = $data['nombre'];
                     $tipoRepuesto->save();
 
                     $response = [
                         'status' => 200,
                         'message' => 'Tipo dispositivo actualizado',
-                        'tipoRepuesto' => $tipoRepuesto
+                        'tipoDispositivo' => $tipoRepuesto
                     ];
                 } else {
                     $response = [

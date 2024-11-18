@@ -21,22 +21,25 @@ class DetallePresVehiculoController extends Controller
     
 //Post
 public function store(Request $request){
-    $data_input=$request->input('data',null);
-    if($data_input){
-        $data=json_decode($data_input,true);
-        $data=array_map('trim',$data);
-        $rules=[
+    $data_input = $request->input('data', null);
+    
+    if ($data_input) {
+        $data = json_decode($data_input, true);
+        $data = array_map('trim', $data);
+        
+        $rules = [
             'prestamo' => 'required|exists:prestamos,idPrestamo',
             'observaciones' => 'required',
-            'kmInicial' => 'required',
-            'kmFinal' => 'required',
+            'kmInicial' => 'required|numeric',
+            'kmFinal' => 'required|numeric',
             'vehiculoPrestado' => 'required|exists:vehiculos,placaVehiculo',
-            'fechaDevolucion' => 'required'
+            'fechaDevolucion' => 'required|date'
         ];
-
-        $isValid=\validator($data,$rules);
-        if(!$isValid->fails()){
-            $detallePresVehiculo=new DetallePresVehiculo();
+        
+        $validator = \Validator::make($data, $rules);
+        
+        if (!$validator->fails()) {
+            $detallePresVehiculo = new DetallePresVehiculo();
             $detallePresVehiculo->prestamo = $data['prestamo'];
             $detallePresVehiculo->observaciones = $data['observaciones'];
             $detallePresVehiculo->kmInicial = $data['kmInicial'];
@@ -44,27 +47,29 @@ public function store(Request $request){
             $detallePresVehiculo->vehiculoPrestado = $data['vehiculoPrestado'];
             $detallePresVehiculo->fechaDevolucion = $data['fechaDevolucion'];
             $detallePresVehiculo->save();
-            $response=array(
-                'status'=>201,
-                'message'=>'detalle de prestamo vehiculo creado',
-                'detallePresVehiculo'=>$detallePresVehiculo
-            );
-        }else{
-            $response=array(
-                'status'=>206,
-                'message'=>'Datos inválidos',
-                'errors'=>$isValid->errors()
-            );
+            
+            $response = [
+                'status' => 201,
+                'message' => 'Detalle de préstamo de vehículo creado',
+                'detallePresVehiculo' => $detallePresVehiculo
+            ];
+        } else {
+            $response = [
+                'status' => 206,
+                'message' => 'Datos inválidos',
+                'errors' => $validator->errors()
+            ];
         }
-    }else{
-        $response=array(
-         'status'=>400,
-         'message'=>'No se enconto el objeto en data'
-         
-        );
+    } else {
+        $response = [
+            'status' => 400,
+            'message' => 'No se encontró el objeto en data'
+        ];
     }
-    return response()->json($response,$response['status']);
+    
+    return response()->json($response, $response['status']);
 }
+
 
 
 public function show($id){

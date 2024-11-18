@@ -45,7 +45,7 @@ public function store(Request $request){
             $response=array(
                 'status'=>201,
                 'message'=>'mantenimiento creado',
-                'dispositivo'=>$Mantenimiento
+                'mantenimiento'=>$Mantenimiento
             );
         }else{
             $response=array(
