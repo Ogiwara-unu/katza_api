@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\TipoMantenimiento;
+use Illuminate\Support\Facades\DB;
 
 class TipoMantenimientoController extends Controller
 {
@@ -17,6 +18,30 @@ class TipoMantenimientoController extends Controller
         );
         return response()->json($response,200);
     }
+
+    public function getVistaTipoMantenimientos() {
+        try {
+            // Ejecutar una consulta en la vista
+            $data = DB::table('vw_TipoMantenimientos')->get();
+    
+            // Formatear la respuesta
+            $response = [
+                'status' => 200,
+                'message' => 'Vista de tipos de mantenimientos obtenida exitosamente',
+                'data' => $data
+            ];
+        } catch (\Exception $e) {
+            // Manejo de errores
+            $response = [
+                'status' => 500,
+                'message' => 'Error al obtener la vista',
+                'error' => $e->getMessage()
+            ];
+        }
+    
+        return response()->json($response, $response['status']);
+    }
+    
 
     
 //Post

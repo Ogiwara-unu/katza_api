@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dispositivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DispositivoController extends Controller
 {
@@ -16,6 +17,31 @@ class DispositivoController extends Controller
         );
         return response()->json($response,200);
     }
+
+    public function dispositivosDisponibles()
+{
+    try {
+        // Ejecutar la función SQL como una tabla
+        $data = DB::select('SELECT * FROM DispositivosDisponibles()');
+
+        // Formatear la respuesta
+        $response = [
+            'status' => 200,
+            'message' => 'Dispositivos disponibles obtenidos exitosamente',
+            'data' => $data
+        ];
+    } catch (\Exception $e) {
+        // Manejo de errores
+        $response = [
+            'status' => 500,
+            'message' => 'Error al obtener los dispositivos disponibles',
+            'error' => $e->getMessage()
+        ];
+    }
+
+    return response()->json($response, $response['status']);
+}
+
 
     
 //Post

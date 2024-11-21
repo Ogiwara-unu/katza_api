@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
 use App\Helpers\JwtAuth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -234,6 +235,48 @@ public function getIdentity(Request $request){
     }
     return response()->json($response);
 }
+
+public function restoreDatabase(Request $request)
+{
+   
+    $backupPath = $request->input('BackupPath', null);
+    $backupPath = trim($request->input('BackupPath', null));
+
+    if (!$backupPath) {
+        return response()->json([
+            'status' => 400,
+            'message' => 'Debe proporcionar la ruta del archivo de respaldo'
+        ], 400);
+    }
+
+    $backupPath = str_replace(['{', '}', '"'], '', $backupPath);
+
+    try {
+        // Cambiar a la base de datos master y desconectar usuarios
+        \DB::connection('sqlsrv')->statement("USE master");
+        \DB::statement("ALTER DATABASE katza SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+
+        // Ejecutar el procedimiento de restauración
+        \DB::statement("EXEC katza.dbo.paRestablecerKatzaDB @BackupPath = ?", [$backupPath]);
+
+        // Volver a habilitar el acceso multiusuario
+        \DB::statement("ALTER DATABASE katza SET MULTI_USER");
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'La base de datos fue restaurada con éxito'
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 500,
+            'message' => 'Error al restaurar la base de datos',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
+
+
 
 
 public function uploadImage(Request $request){

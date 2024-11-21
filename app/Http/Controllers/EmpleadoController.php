@@ -61,8 +61,8 @@ public function store(Request $request){
         }
     }else{
         $response=array(
-         'status'=>400,
-         'message'=>'No se enconto el objeto en data'
+         'status'=>206,
+         'message'=>'Datos repetidos'
          
         );
     }
